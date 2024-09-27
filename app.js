@@ -2,13 +2,12 @@ import {
     S3Client,
     PutObjectCommand,
   } from "@aws-sdk/client-s3";
-import {v4 as uuidv4} from 'uuid';
 import express from "express";
 import bodyParser from "body-parser"
 
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.text({type:"*/*"}));
 
  // A region and credentials can be declared explicitly. For example
   // `new S3Client({ region: 'us-east-1', credentials: {...} })` would
@@ -24,23 +23,19 @@ const s3Client = new S3Client({ region: 'us-west-2',   credentials: {
 
 const port = 8099;
 app.get('/', (req, res) => {
-    res.status(200).send("Hello, your S3 POST listener is still alive!");
+  console.log("GET request recieved");
+  res.status(200).send("Hello, your S3 POST listener is still alive!");
 });
 
 app.listen(port, () => {console.log (`App now listening on ${port}\n`);});
 
 app.post('/', async (req, res) => {
-  console.log(req.body);
-  let bodyKey = Object.keys(req.body)[0]
-  let bodyValue = Object.values(req.body)[0];
-  console.log(bodyKey, bodyValue)
-  
-
+  console.log(`req.body: ${req.body}`);
   await s3Client.send(
     new PutObjectCommand({
       Bucket: "cps-web-server-target",
-      Key: `${uuidv4()}.txt`,
-      Body: bodyValue,
+      Key: `${Date.now()}.txt`,
+      Body: `${req.body}`,
     }));
 
   res.end("ended post");
