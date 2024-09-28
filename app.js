@@ -16,10 +16,7 @@ app.use(bodyParser.text({type:"*/*"}));
   // are not defined here.
 
 
-const s3Client = new S3Client({ region: 'us-west-2',   credentials: {
-  accessKeyId: "AKIAUJ3VUV3RTK6INZP2", 
-  secretAccessKey: "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",
-},});
+const s3Client = new S3Client({ region: 'us-west-2'});
 
 const port = 8099;
 app.get('/', (req, res) => {
