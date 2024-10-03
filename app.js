@@ -46,7 +46,7 @@ app.post('/', async (req, res) => {
     console.log("No errors encountered\n");
 
   } catch (e) {
-    res.status(500).send(`Server encountered an error: ${e.name}.`);
+    res.status(500).send(`Server encountered an error.`);
     console.error(`ERROR: ${e.toString()}
       Request size: ${req.socket.bytesRead} bytes
       Source IP: ${req.socket.remoteAddress}
